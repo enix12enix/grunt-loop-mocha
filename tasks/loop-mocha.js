@@ -136,7 +136,16 @@ module.exports = function (grunt) {
         });
         return results;
       }, {});
+      console.log('================iterationResults');
       console.log(JSON.stringify(iterationResults));
+      console.log('================localopts');
+      console.log(localopts);
+      console.log('================localMochaOptions');
+      console.log(localMochaOptions);
+      console.log('================loopOptions');
+      console.log(loopOptions);
+      console.log('================localOtherOptionsStringified');
+      console.log(localOtherOptionsStringified);
       if (iterationError) {
         var msg = "[grunt-loop-mocha] error, please check erroneous iteration(s): \n" + JSON.stringify(iterationResults, null, 4) + "\n";
         console.log('Test Failed');
