@@ -136,8 +136,10 @@ module.exports = function (grunt) {
         });
         return results;
       }, {});
+      console.log(JSON.stringify(iterationResults));
       if (iterationError) {
         var msg = "[grunt-loop-mocha] error, please check erroneous iteration(s): \n" + JSON.stringify(iterationResults, null, 4) + "\n";
+        console.log('Test Failed');
         if (noFail === true) {
           console.log(msg);
           done();
@@ -147,6 +149,7 @@ module.exports = function (grunt) {
         }
 
       } else {
+        console.log('Test Passed');
         done();
       }
       console.log("[grunt-loop-mocha] Total Runtime", Math.floor((((new Date()).getTime()) - runStamp)/1000) + "s");
