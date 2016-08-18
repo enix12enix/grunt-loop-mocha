@@ -136,19 +136,23 @@ module.exports = function (grunt) {
         });
         return results;
       }, {});
-      console.log('================iterationResults');
-      console.log(JSON.stringify(iterationResults));
-      console.log('================localopts');
-      console.log(localopts);
-      console.log('================localMochaOptions');
-      console.log(localMochaOptions);
-      console.log('================loopOptions');
-      console.log(loopOptions);
-      console.log('================localOtherOptionsStringified');
-      console.log(localOtherOptionsStringified);
+      
+      function hitSphinx(callback) {
+        if (process.argv.indexOf('-sphinx') != -1) {
+          var fs = require('fs');
+          var sphinxdataFile = __dirname + '/../../../tests/functional/datadriven/report/sphinxdata';
+          var nemoData = fs.readFileSync(sphinxdataFile, 'utf8').split("\n")[0];
+          callback(null, nemoData);
+        }
+      }
+
       if (iterationError) {
+        hitSphinx(function(err, nemoData) {
+          console.log('=============== nemo test result(failed) ===============');
+          console.log(nemoData);
+          // implement here
+        });
         var msg = "[grunt-loop-mocha] error, please check erroneous iteration(s): \n" + JSON.stringify(iterationResults, null, 4) + "\n";
-        console.log('Test Failed');
         if (noFail === true) {
           console.log(msg);
           done();
@@ -158,7 +162,11 @@ module.exports = function (grunt) {
         }
 
       } else {
-        console.log('Test Passed');
+        hitSphinx(function(err, nemoData) {
+          console.log('=============== nemo test result(passed) ===============');
+          console.log(nemoData);
+          // implement here
+        });
         done();
       }
       console.log("[grunt-loop-mocha] Total Runtime", Math.floor((((new Date()).getTime()) - runStamp)/1000) + "s");
