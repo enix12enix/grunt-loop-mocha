@@ -142,14 +142,22 @@ module.exports = function (grunt) {
           var fs = require('fs');
           var sphinxdataFile = __dirname + '/../../../tests/functional/datadriven/report/sphinxdata';
           var nemoData = fs.readFileSync(sphinxdataFile, 'utf8').split("\n")[0];
-          callback(null, nemoData);
+          try {
+            var errormsgFile = __dirname + '/../../../tests/functional/datadriven/report/errormsg';
+            fs.statSync(errormsgFile);
+            var errmsg = fs.readFileSync(errormsgFile, 'utf8');
+            callback(null, nemoData, errmsg);
+          } catch (e) {
+            callback(null, nemoData);
+          }
         }
       }
 
       if (iterationError) {
-        hitSphinx(function(err, nemoData) {
+        hitSphinx(function(err, nemoData, errmsg) {
           console.log('=============== nemo test result(failed) ===============');
           console.log(nemoData);
+          console.log(errmsg);
           // implement here
         });
         var msg = "[grunt-loop-mocha] error, please check erroneous iteration(s): \n" + JSON.stringify(iterationResults, null, 4) + "\n";
